@@ -47,11 +47,7 @@ final class NetworkEventProducer: EventProducer {
             _ = withUnsafeMutablePointer(to: &flags, { SCNetworkReachabilityGetFlags(reachability, $0) })
         }
 
-        #if targetEnvironment(simulator)
         let isOnWWAN = true
-        #else
-        let isOnWWAN = flags.intersection([.connectionRequired, .transientConnection]) == [.connectionRequired, .transientConnection]
-        #endif
 
         guard flags.contains(.reachable), isOnWWAN else { return .unreachable }
 
